@@ -17,13 +17,7 @@ export default {
   },
   data: () => {
     return {
-      data: [
-        {
-          insert: {
-            graph: 'x+2'
-          }
-        }
-      ]
+      data: '[{"insert": {"graph": "x+2"}}]'
     }
   }
 }

@@ -79,10 +79,10 @@ export default {
     let self = this
     console.log(this.$refs.editor.quill)
     let quill = this.$refs.editor.quill
-    quill.setContents(this.value)
+    quill.setContents(JSON.parse(this.value))
     quill.on('text-change', (delta) => {
       let data = quill.getContents()
-      self.$emit('input', data)
+      self.$emit('input', JSON.stringify(data))
     })
   }
 }
