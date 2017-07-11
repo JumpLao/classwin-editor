@@ -1,10 +1,15 @@
 {
   "name": "classwin-editor",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A Vue.js project",
   "author": "Nattaphat Laoharawee <nattaphat.la@gmail.com>",
   "private": false,
   "main": "src/components/Editor.vue",
+  "repository" :
+  { 
+    "type" : "git",
+    "url" : "https://github.com/JumpLao/classwin-editor.git"
+  },
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",

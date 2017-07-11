@@ -73,7 +73,7 @@ export default class Graph extends Module {
     let self = this
     this.quill = quill
     this.options = options
-    this.quill.root.addEventListener('click', this.handleClick, false)
+    this.quill.root.addEventListener('click', this.handleClick.bind(this), false)
     this.handler = options.handler
     this.quill.theme.modules.toolbar.handlers.graph = () => {
       self.prompt()
@@ -118,10 +118,11 @@ export default class Graph extends Module {
       return Promise.reject(e)
     })
   }
-  handleClick = (evt) => {
+  handleClick (evt) {
+    let self = this
     let graphObj = findAncestor(evt.target, 'ql-graph')
     let isGraph = graphObj !== null
-    if (evt.target && isGraph) {
+    if (evt.target && isGraph && self.quill.isEnabled()) {
       if (this.graphObj === isGraph) {
         // we are already focused on this formula
         return

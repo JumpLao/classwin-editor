@@ -9,7 +9,7 @@ export default class EquationEditor {
   constructor (quill, options = {}) {
     let self = this
     this.quill = quill
-    this.quill.root.addEventListener('click', this.handleClick, false)
+    this.quill.root.addEventListener('click', this.handleClick.bind(this), false)
     this.quill.root.parentNode.style.position = this.quill.root.parentNode.style.position || 'relative'
     /* this.quill.theme.editTooltip = new EditTooltip(quill, options.bound) */
     this.handler = options.handler
@@ -34,10 +34,11 @@ export default class EquationEditor {
       return Promise.reject(e)
     })
   }
-  handleClick = (evt) => {
+  handleClick (evt) {
+    let self = this
     let formularObj = findAncestor(evt.target, 'ql-formula')
     let isFormula = formularObj !== null
-    if (evt.target && isFormula) {
+    if (evt.target && isFormula && self.quill.isEnabled()) {
       if (this.formularObj) {
         // we were just focused on another formula
         this.hide()
@@ -49,7 +50,7 @@ export default class EquationEditor {
       this.hide()
     }
   }
-  show = (target) => {
+  show (target) {
     let self = this
     this.formularObj = target
     /* this.prompt(target.getAttribute('data-value')).then(() => {
@@ -65,7 +66,7 @@ export default class EquationEditor {
 
     // show ui
   }
-  hide = (target) => {
+  hide (target) {
     // hide ui
     delete this.formularObj
   }

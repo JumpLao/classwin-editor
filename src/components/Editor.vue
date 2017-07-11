@@ -1,7 +1,7 @@
 <template>
   <div>
-    <quill-editor :options="options">
-      <div id="toolbar" slot="toolbar">
+    <quill-editor :options="options" ref="editor" :class="{'quill-readonly': readOnly}">
+      <div id="toolbar" slot="toolbar" >
         <span>
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
@@ -37,9 +37,11 @@ Quill.register('modules/Graph', Graph)
 // mount with component(can't work in Nuxt.js/SSR)
 import {quillEditor} from 'vue-quill-editor'
 export default {
+  props: ['value', 'readOnly'],
   data () {
     return {
       options: {
+        readOnly: this.readOnly || false,
         modules: {
           EquationEditor: {
             handler (value = '') {
@@ -72,8 +74,26 @@ export default {
   },
   components: {
     quillEditor
+  },
+  mounted () {
+    let self = this
+    console.log(this.$refs.editor.quill)
+    let quill = this.$refs.editor.quill
+    quill.setContents(this.value)
+    quill.on('text-change', (delta) => {
+      let data = quill.getContents()
+      self.$emit('input', data)
+    })
   }
 }
 </script>
 <style lang='scss'>
+  .quill-readonly {
+    .ql-toolbar{
+      display:none !important;
+    }
+    .ql-container{
+      border: 0 !important;
+    }
+  }
 </style>

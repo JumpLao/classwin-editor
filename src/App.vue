@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <editor></editor>
+    <editor v-model="data" :readOnly="false"></editor>
+    {{data}}
   </div>
 </template>
 
@@ -13,6 +14,17 @@ export default {
   components: {
     Hello,
     Editor
+  },
+  data: () => {
+    return {
+      data: [
+        {
+          insert: {
+            graph: 'x+2'
+          }
+        }
+      ]
+    }
   }
 }
 </script>
