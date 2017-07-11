@@ -96,4 +96,9 @@ export default {
       border: 0 !important;
     }
   }
+  .ql-editor{
+    img {
+      width: 300px !important;
+    }
+  }
 </style>
