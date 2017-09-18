@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <editor v-model="data" :readOnly="false"></editor>
+    <editor v-model="data" :readOnly="false" :gapp-config="config"></editor>
     {{data}}
   </div>
 </template>
@@ -17,7 +17,12 @@ export default {
   },
   data: () => {
     return {
-      data: '[{"insert": {"graph": "x+2"}}]'
+      data: '[{"insert": {"graph": "x+2"}}]',
+      config: {
+        APP_ID: '<APP_ID>',
+        CLIENT_ID: '<CLIENT_ID>',
+        API_KEY: '<API_KEY>'
+      }
     }
   }
 }
