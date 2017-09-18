@@ -1,9 +1,7 @@
 import Quill from 'quill'
 function findAncestor (el, tag) {
   if (el.tagName === tag) return el
-  // while ((el = el.parentElement) && el.tagName !== tag) {
-  // }
-  // return el
+  return null
 }
 
 export default class ImagePicker {
