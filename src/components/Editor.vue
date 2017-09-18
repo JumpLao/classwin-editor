@@ -28,12 +28,14 @@ import katex from 'katex'
 window.katex = katex
 import equationEditor from './modules/equationEditor'
 import Graph from './modules/graph'
+import ImagePicker from './modules/ImagePicker'
 import { ImageDrop } from 'quill-image-drop-module'
 import 'katex/dist/katex.min.css'
 import 'font-awesome/css/font-awesome.css'
 Quill.register('modules/EquationEditor', equationEditor)
 Quill.register('modules/imageDrop', ImageDrop)
 Quill.register('modules/Graph', Graph)
+Quill.register('modules/ImagePicker', ImagePicker)
 // mount with component(can't work in Nuxt.js/SSR)
 import {quillEditor} from 'vue-quill-editor'
 export default {
@@ -48,6 +50,16 @@ export default {
               let formula = prompt('Enter latex formula', value)
               if (formula) {
                 return Promise.resolve(formula)
+              } else {
+                return Promise.reject('Cancel')
+              }
+            }
+          },
+          ImagePicker: {
+            handler (value = '') {
+              let imageUrl = prompt('Enter image url', value)
+              if (imageUrl) {
+                return Promise.resolve(imageUrl)
               } else {
                 return Promise.reject('Cancel')
               }
