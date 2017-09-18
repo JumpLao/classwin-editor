@@ -11,12 +11,13 @@ let pickerApiLoaded = false
 const onPickerApiLoad = () => {
   pickerApiLoaded = true
 }
-const onAuthApiLoad = () => {
+const onAuthApiLoad = (CLIENT_ID) => {
   if (moment().unix() < localStorage.getItem('googleOauthTokenExpires')) {
+    console.log('is signed in')
     return true
   }
   window.gapi.auth.authorize({
-    'client_id': this.CLIENT_ID,
+    'client_id': CLIENT_ID,
     'scope': SCOPE,
     'immediate': false
   }, (authResult) => {
@@ -44,7 +45,7 @@ class Gapp {
     return true
   }
   handleClientLoad = () => {
-    gapi.load('auth', {'callback': onAuthApiLoad})
+    gapi.load('auth', {'callback': () => onAuthApiLoad(this.CLIENT_ID)})
     gapi.load('picker', {'callback': onPickerApiLoad})
   }
   createPicker = (pickerCallback) => {

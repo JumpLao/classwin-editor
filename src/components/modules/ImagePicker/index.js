@@ -1,9 +1,9 @@
 import Quill from 'quill'
-function findAncestor (el, cls) {
-  while ((el = el.parentElement) && !el.classList.contains(cls)) {
-    console.log('el', el)
-  }
-  return el
+function findAncestor (el, tag) {
+  if (el.tagName === tag) return el
+  // while ((el = el.parentElement) && el.tagName !== tag) {
+  // }
+  // return el
 }
 
 export default class ImagePicker {
@@ -37,26 +37,26 @@ export default class ImagePicker {
   }
   handleClick (evt) {
     let self = this
-    let formularObj = findAncestor(evt.target, 'ql-formula')
-    let isFormula = formularObj !== null
-    if (evt.target && isFormula && self.quill.isEnabled()) {
-      if (this.formularObj) {
+    let imageObj = findAncestor(evt.target, 'IMG')
+    let isImage = imageObj !== null
+    if (evt.target && isImage && self.quill.isEnabled()) {
+      if (this.imageObj) {
         // we were just focused on another formula
         this.hide()
       }
       // clicked on an formula inside the editor
-      this.show(formularObj)
-    } else if (this.formularObj) {
+      this.show(imageObj)
+    } else if (this.imageObj) {
       // clicked on a non formula
       this.hide()
     }
   }
   show (target) {
     let self = this
-    this.formularObj = target
+    this.imageObj = target
     /* this.prompt(target.getAttribute('data-value')).then(() => {
     }) */
-    let index = self.quill.getIndex(Quill.find(self.formularObj)) + 1
+    let index = self.quill.getIndex(Quill.find(self.imageObj)) + 1
     self.quill.setSelection(index, 0)
     this.prompt(target.getAttribute('data-value')).then(() => {
       self.quill.deleteText(index - 1, 1)// delete equation
@@ -69,7 +69,7 @@ export default class ImagePicker {
   }
   hide (target) {
     // hide ui
-    delete this.formularObj
+    delete this.imageObj
   }
 }
 if (window.Quill) {
