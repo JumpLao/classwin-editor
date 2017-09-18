@@ -8,12 +8,14 @@ import moment from 'moment'
 const SCOPE = ['https://www.googleapis.com/auth/drive']
 let pickerApiLoaded = false
 
-const onPickerApiLoad = () => {
+const onPickerApiLoad = (promise) => {
   pickerApiLoaded = true
+  promise.resolve(true)
 }
-const onAuthApiLoad = (CLIENT_ID) => {
+const onAuthApiLoad = (CLIENT_ID, promise) => {
   if (moment().unix() < localStorage.getItem('googleOauthTokenExpires')) {
     console.log('is signed in')
+    promise.resolve(true)
     return true
   }
   window.gapi.auth.authorize({
@@ -27,7 +29,9 @@ const onAuthApiLoad = (CLIENT_ID) => {
       const expiresAt = authResult.expires_at
       localStorage.setItem('googleOauthToken', oauthToken)
       localStorage.setItem('googleOauthTokenExpires', expiresAt)
+      promise.resolve(authResult)
     }
+    promise.reject({ error: authResult.error })
   })
 }
 
@@ -45,8 +49,13 @@ class Gapp {
     return true
   }
   handleClientLoad = () => {
-    gapi.load('auth', {'callback': () => onAuthApiLoad(this.CLIENT_ID)})
-    gapi.load('picker', {'callback': onPickerApiLoad})
+    const promiseAuth = new Promise((resolve, reject) => {
+      gapi.load('auth', {'callback': () => onAuthApiLoad(this.CLIENT_ID, { resolve, reject })})
+    })
+    const promisePicker = new Promise((resolve, reject) => {
+      gapi.load('picker', {'callback': () => onPickerApiLoad({ resolve, reject })})
+    })
+    return Promise.all([promiseAuth, promisePicker])
   }
   createPicker = (pickerCallback) => {
     const oauthToken = localStorage.getItem('googleOauthToken')

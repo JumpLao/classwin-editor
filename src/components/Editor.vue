@@ -75,7 +75,8 @@ export default {
                     reject('Cancel')
                   })
                 }
-                gapp.createPicker(pickerCallback)
+                gapp.handleClientLoad()
+                .then((data) => gapp.createPicker(pickerCallback))
               })
               return promise
             }
@@ -111,9 +112,10 @@ export default {
       let data = quill.getContents()
       self.$emit('input', JSON.stringify(data))
     })
-    Promise.resolve({})
-    .then(() => gapp.init(self.gappConfig))
-    .then(() => gapp.handleClientLoad())
+    gapp.init(self.gappConfig)
+    // Promise.resolve({})
+    // .then(() => gapp.init(self.gappConfig))
+    // .then(() => gapp.handleClientLoad())
   }
 }
 </script>
