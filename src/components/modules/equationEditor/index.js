@@ -6,7 +6,8 @@ function findAncestor (el, cls) {
 }
 
 export default class EquationEditor {
-  constructor (quill, options = {}) {
+  constructor (quill, options) {
+    options = options || {}
     let self = this
     this.quill = quill
     this.quill.root.addEventListener('click', this.handleClick.bind(this), false)
@@ -17,7 +18,8 @@ export default class EquationEditor {
       self.prompt()
     }
   }
-  prompt (curValue = '') {
+  prompt (curValue) {
+    curValue = curValue || ''
     let self = this
     return this.handler(curValue).then((value) => {
       let range = self.quill.getSelection(true)

@@ -1,7 +1,7 @@
 <template>
   <div>
     <quill-editor :options="options" ref="editor" :class="{'quill-readonly': readOnly}">
-      <div id="toolbar" slot="toolbar" >
+      <div :id="`toolbar-${uuid}`" slot="toolbar" class="quill-toolbar">
         <span>
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
@@ -39,7 +39,13 @@ import {quillEditor} from 'vue-quill-editor'
 export default {
   props: ['value', 'readOnly'],
   data () {
+    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      let r = Math.random() * 16 | 0
+      let v = c === 'x' ? r : (r & 0x3 | 0x8)
+      return v.toString(16)
+    })
     return {
+      uuid,
       options: {
         readOnly: this.readOnly || false,
         modules: {
@@ -66,7 +72,7 @@ export default {
           imageDrop: true,
           formula: true,          // Include formula module
           toolbar: {
-            container: '#toolbar'
+            container: `#toolbar-${uuid}`
           }
         }
       }
@@ -77,19 +83,37 @@ export default {
   },
   mounted () {
     let self = this
-    console.log(this.$refs.editor.quill)
     let quill = this.$refs.editor.quill
-    quill.setContents(JSON.parse(this.value))
+    this.updateEditor()
     quill.on('text-change', (delta) => {
       let data = quill.getContents()
       self.$emit('input', JSON.stringify(data))
     })
+  },
+  watch: {
+    value (newVal, oldVal) {
+      if (!oldVal || oldVal === '') {
+        this.updateEditor()
+      }
+    }
+  },
+  methods: {
+    updateEditor () {
+      let quill = this.$refs.editor.quill
+      let data
+      try {
+        data = JSON.parse(this.value)
+      } catch (e) {
+        data = []
+      }
+      quill.setContents(data)
+    }
   }
 }
 </script>
 <style lang='scss'>
   .quill-readonly {
-    .ql-toolbar{
+    .quill-toolbar{
       display:none !important;
     }
     .ql-container{

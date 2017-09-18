@@ -68,7 +68,8 @@ GraphBlot.className = 'ql-graph'
 GraphBlot.tagName = 'SPAN'
 
 export default class Graph extends Module {
-  constructor (quill, options = {}) {
+  constructor (quill, options) {
+    options = options || {}
     super(quill, options)
     let self = this
     this.quill = quill
@@ -101,7 +102,8 @@ export default class Graph extends Module {
   hide (target) {
     // hide ui
   }
-  prompt (curValue = '') {
+  prompt (curValue) {
+    curValue = curValue || ''
     let self = this
     return this.handler(curValue).then((value) => {
       let range = self.quill.getSelection(true)
