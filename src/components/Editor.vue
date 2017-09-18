@@ -38,8 +38,11 @@ Quill.register('modules/Graph', Graph)
 Quill.register('modules/ImagePicker', ImagePicker)
 // mount with component(can't work in Nuxt.js/SSR)
 import {quillEditor} from 'vue-quill-editor'
+import Gapp from '../utils/googlePicker'
+const gapp = new Gapp()
+
 export default {
-  props: ['value', 'readOnly'],
+  props: ['value', 'readOnly', 'gapp-config'],
   data () {
     return {
       options: {
@@ -57,12 +60,24 @@ export default {
           },
           ImagePicker: {
             handler (value = '') {
-              let imageUrl = prompt('Enter image url', value)
-              if (imageUrl) {
-                return Promise.resolve(imageUrl)
-              } else {
-                return Promise.reject('Cancel')
-              }
+              let promise = new Promise((resolve, reject) => {
+                const pickerCallback = (data) => {
+                  const file = data.docs[0]
+                  const url = `https://drive.google.com/uc?id=${file.id}`
+                  console.log(file, url)
+                  console.log(promise)
+                  gapp.createPermission(file.id)
+                  .then(() => {
+                    console.log(url)
+                    resolve(url)
+                  })
+                  .catch(() => {
+                    reject('Cancel')
+                  })
+                }
+                gapp.createPicker(pickerCallback)
+              })
+              return promise
             }
           },
           Graph: {
@@ -96,6 +111,9 @@ export default {
       let data = quill.getContents()
       self.$emit('input', JSON.stringify(data))
     })
+    Promise.resolve({})
+    .then(() => gapp.init(self.gappConfig))
+    .then(() => gapp.handleClientLoad())
   }
 }
 </script>
