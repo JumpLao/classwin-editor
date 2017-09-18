@@ -28,16 +28,21 @@ import katex from 'katex'
 window.katex = katex
 import equationEditor from './modules/equationEditor'
 import Graph from './modules/graph'
+import ImagePicker from './modules/ImagePicker'
 import { ImageDrop } from 'quill-image-drop-module'
 import 'katex/dist/katex.min.css'
 import 'font-awesome/css/font-awesome.css'
 Quill.register('modules/EquationEditor', equationEditor)
 Quill.register('modules/imageDrop', ImageDrop)
 Quill.register('modules/Graph', Graph)
+Quill.register('modules/ImagePicker', ImagePicker)
 // mount with component(can't work in Nuxt.js/SSR)
 import {quillEditor} from 'vue-quill-editor'
+import Gapp from '../utils/googlePicker'
+const gapp = new Gapp()
+
 export default {
-  props: ['value', 'readOnly'],
+  props: ['value', 'readOnly', 'gapp-config'],
   data () {
     return {
       options: {
@@ -51,6 +56,28 @@ export default {
               } else {
                 return Promise.reject('Cancel')
               }
+            }
+          },
+          ImagePicker: {
+            handler (value = '') {
+              let promise = new Promise((resolve, reject) => {
+                const pickerCallback = (data) => {
+                  const file = data.docs[0]
+                  const url = `https://drive.google.com/uc?id=${file.id}`
+                  console.log(file, url)
+                  console.log(promise)
+                  gapp.createPermission(file.id)
+                  .then(() => {
+                    console.log(url)
+                    resolve(url)
+                  })
+                  .catch(() => {
+                    reject('Cancel')
+                  })
+                }
+                gapp.createPicker(pickerCallback)
+              })
+              return promise
             }
           },
           Graph: {
@@ -84,6 +111,9 @@ export default {
       let data = quill.getContents()
       self.$emit('input', JSON.stringify(data))
     })
+    Promise.resolve({})
+    .then(() => gapp.init(self.gappConfig))
+    .then(() => gapp.handleClientLoad())
   }
 }
 </script>
