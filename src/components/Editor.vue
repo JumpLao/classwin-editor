@@ -42,7 +42,19 @@ import Gapp from '../utils/googlePicker'
 const gapp = new Gapp()
 
 export default {
-  props: ['value', 'readOnly', 'gapp-config'],
+  props: {
+    value: {
+      type: String,
+      default: '[]'
+    },
+    readOnly: {
+      type: Boolean
+    },
+    'gapp-config': {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       options: {
@@ -129,6 +141,7 @@ export default {
     }
   }
   .ql-editor{
+    min-height: 100px;
     img {
       width: 300px !important;
     }
