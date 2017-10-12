@@ -8,12 +8,14 @@ import moment from 'moment'
 const SCOPE = ['https://www.googleapis.com/auth/drive']
 let pickerApiLoaded = false
 
-const onPickerApiLoad = () => {
+const onPickerApiLoad = (promise) => {
   pickerApiLoaded = true
+  promise.resolve(true)
 }
-const onAuthApiLoad = (CLIENT_ID) => {
+const onAuthApiLoad = (CLIENT_ID, promise) => {
   if (moment().unix() < localStorage.getItem('googleOauthTokenExpires')) {
     console.log('is signed in')
+    promise.resolve(true)
     return true
   }
   window.gapi.auth.authorize({
@@ -27,7 +29,9 @@ const onAuthApiLoad = (CLIENT_ID) => {
       const expiresAt = authResult.expires_at
       localStorage.setItem('googleOauthToken', oauthToken)
       localStorage.setItem('googleOauthTokenExpires', expiresAt)
+      promise.resolve(authResult)
     }
+    promise.reject({ error: authResult.error })
   })
 }
 
@@ -37,18 +41,23 @@ class Gapp {
     this.CLIENT_ID = ''
     this.API_KEY = ''
   }
-  init = (obj) => {
+  init (obj) {
     console.log('configs', obj)
     this.APP_ID = obj.APP_ID
     this.CLIENT_ID = obj.CLIENT_ID
     this.API_KEY = obj.API_KEY
     return true
   }
-  handleClientLoad = () => {
-    gapi.load('auth', {'callback': () => onAuthApiLoad(this.CLIENT_ID)})
-    gapi.load('picker', {'callback': onPickerApiLoad})
+  handleClientLoad () {
+    const promiseAuth = new Promise((resolve, reject) => {
+      gapi.load('auth', {'callback': () => onAuthApiLoad(this.CLIENT_ID, { resolve, reject })})
+    })
+    const promisePicker = new Promise((resolve, reject) => {
+      gapi.load('picker', {'callback': () => onPickerApiLoad({ resolve, reject })})
+    })
+    return Promise.all([promiseAuth, promisePicker])
   }
-  createPicker = (pickerCallback) => {
+  createPicker (pickerCallback) {
     const oauthToken = localStorage.getItem('googleOauthToken')
     console.log(oauthToken)
     const mimeTypes = 'image/png,image/jpeg,image/jpg'
@@ -70,7 +79,7 @@ class Gapp {
       picker.setVisible(true)
     }
   }
-  createPermission = (fileId) => {
+  createPermission (fileId) {
     const url = `https://www.googleapis.com/drive/v3/files/${fileId}/permissions`
     return Vue.http.post(url, {
       role: 'reader',
