@@ -42,7 +42,19 @@ import Gapp from '../utils/googlePicker'
 const gapp = new Gapp()
 
 export default {
-  props: ['value', 'readOnly', 'gapp-config'],
+  props: {
+    value: {
+      type: String,
+      default: '[]'
+    },
+    readOnly: {
+      type: Boolean
+    },
+    'gapp-config': {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       let r = Math.random() * 16 | 0
@@ -150,6 +162,7 @@ export default {
     }
   }
   .ql-editor{
+    min-height: 100px;
     img {
       width: 300px !important;
     }
