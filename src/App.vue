@@ -7,8 +7,10 @@
 </template>
 
 <script>
+import config from './config'
 import Hello from './components/Hello'
 import Editor from './components/Editor'
+
 export default {
   name: 'app',
   components: {
@@ -18,11 +20,7 @@ export default {
   data: () => {
     return {
       data: '[{"insert": {"graph": "x+2"}}]',
-      config: {
-        APP_ID: '<APP_ID>',
-        CLIENT_ID: '<CLIENT_ID>',
-        API_KEY: '<API_KEY>'
-      }
+      config: config.gapi
     }
   }
 }
