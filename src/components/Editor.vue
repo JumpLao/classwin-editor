@@ -137,16 +137,13 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
-      if (!oldVal || oldVal === '') {
-        this.updateEditor()
-      }
+      this.updateEditor()
     }
   },
   methods: {
     updateEditor () {
       let quill = this.$refs.editor.quill
       let data = this.value
-      console.log(typeof data)
       if (data instanceof Array) {
         data = {ops: data}
       }
@@ -157,8 +154,13 @@ export default {
           data = {ops: []}
         }
       }
-      this.$emit('input', JSON.stringify(data))
+      let refocus = quill.hasFocus()
       quill.setContents(data)
+      if (refocus) {
+        let range = quill.getLength()
+        quill.focus()
+        quill.setSelection(range)
+      }
     }
   }
 }

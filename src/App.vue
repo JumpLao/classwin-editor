@@ -18,13 +18,19 @@ export default {
   data: () => {
     return {
       /* eslint-disable */
-      data: [],
+      data: "",
       config: {
         APP_ID: '<APP_ID>',
         CLIENT_ID: '<CLIENT_ID>',
         API_KEY: '<API_KEY>'
       }
     }
+  },
+  mounted () {
+    let self = this
+    setTimeout(function () {
+      // self.data = "{\"ops\":[{\"insert\":\"Hello worl\\n\"}]}"
+    },1000)
   }
 }
 </script>
