@@ -48,8 +48,8 @@ const gapp = new Gapp()
 export default {
   props: {
     value: {
-      type: String,
-      default: '[]'
+      type: [String, Array, Object],
+      default: {ops: []}
     },
     readOnly: {
       type: Boolean
@@ -137,7 +137,6 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
-      console.log(newVal, oldVal)
       if (!oldVal || oldVal === '') {
         this.updateEditor()
       }
@@ -146,12 +145,17 @@ export default {
   methods: {
     updateEditor () {
       let quill = this.$refs.editor.quill
-      let data
-      console.log(this.value)
-      try {
-        data = JSON.parse(this.value)
-      } catch (e) {
-        data = {ops: []}
+      let data = this.value
+      console.log(typeof data)
+      if (data instanceof Array) {
+        data = {ops: data}
+      }
+      if (typeof data === 'string') {
+        try {
+          data = JSON.parse(this.value)
+        } catch (e) {
+          data = {ops: []}
+        }
       }
       this.$emit('input', JSON.stringify(data))
       quill.setContents(data)

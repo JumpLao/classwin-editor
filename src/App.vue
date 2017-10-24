@@ -17,7 +17,8 @@ export default {
   },
   data: () => {
     return {
-      data: '',
+      /* eslint-disable */
+      data: [],
       config: {
         APP_ID: '<APP_ID>',
         CLIENT_ID: '<CLIENT_ID>',
