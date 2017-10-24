@@ -137,6 +137,7 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
+      console.log(newVal, oldVal)
       if (!oldVal || oldVal === '') {
         this.updateEditor()
       }
@@ -146,11 +147,13 @@ export default {
     updateEditor () {
       let quill = this.$refs.editor.quill
       let data
+      console.log(this.value)
       try {
         data = JSON.parse(this.value)
       } catch (e) {
-        data = []
+        data = {ops: []}
       }
+      this.$emit('input', JSON.stringify(data))
       quill.setContents(data)
     }
   }

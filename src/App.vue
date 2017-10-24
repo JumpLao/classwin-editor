@@ -17,7 +17,7 @@ export default {
   },
   data: () => {
     return {
-      data: '[{"insert": {"graph": "x+2"}}]',
+      data: '',
       config: {
         APP_ID: '<APP_ID>',
         CLIENT_ID: '<CLIENT_ID>',
