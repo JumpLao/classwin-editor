@@ -20,6 +20,7 @@
         <span>
           <button class="ql-formula"></button>
           <button class="ql-image"></button>
+          <button class="ql-video"></button>
           <button class="ql-graph">graph</button>
         </span>
       </div>
