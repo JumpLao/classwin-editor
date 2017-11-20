@@ -54,6 +54,9 @@ export default {
     readOnly: {
       type: Boolean
     },
+    placeholder: {
+      type: String
+    },
     'gapp-config': {
       type: Object,
       required: true
@@ -69,6 +72,7 @@ export default {
       uuid,
       options: {
         readOnly: this.readOnly || false,
+        placeholder: this.placeholder || ' ',
         modules: {
           EquationEditor: {
             handler (value = '') {

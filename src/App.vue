@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <editor v-model="data" :readOnly="false" :gapp-config="config"></editor>
+    <editor v-model="data" placeholder="place holder" :readOnly="false" :gapp-config="config"></editor>
     {{data}}
   </div>
 </template>
