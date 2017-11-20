@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :id="`editor-${uuid}`" >
     <quill-editor :options="options" ref="editor" :class="{'quill-readonly': readOnly}">
       <div :id="`toolbar-${uuid}`" slot="toolbar" class="quill-toolbar">
         <span>
@@ -74,6 +74,7 @@ export default {
       options: {
         readOnly: this.readOnly || false,
         placeholder: this.placeholder || ' ',
+        bounds: `#editor-${uuid}`,
         modules: {
           EquationEditor: {
             handler (value = '') {
