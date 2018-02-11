@@ -154,7 +154,9 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
-      this.updateEditor()
+      if (!oldVal || oldVal === '') {
+        this.updateEditor()
+      }
     }
   },
   methods: {
@@ -171,13 +173,14 @@ export default {
           data = {ops: []}
         }
       }
-      let refocus = quill.hasFocus()
+      // let refocus = quill.hasFocus()
+      this.$emit('input', JSON.stringify(data))
       quill.setContents(data)
-      if (refocus) {
-        let range = quill.getLength()
-        quill.focus()
-        quill.setSelection(range)
-      }
+      // if (refocus) {
+      //   let range = quill.getLength()
+      //   quill.focus()
+      //   quill.setSelection(range)
+      // }
     }
   }
 }
