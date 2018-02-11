@@ -7,15 +7,16 @@
     >
       <div :id="`toolbar-${uuid}`" slot="toolbar" class="quill-toolbar">
         <span>
+          <select class="ql-size" title="size"></select>
+        </span>
+        <span>
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
           <button class="ql-underline"></button>
         </span>
         <span>
           <select class="ql-color" title="color"></select>
-        </span>
-        <span>
-          <select class="ql-size" title="size"></select>
+          <select class="ql-background" title="color"></select>
         </span>
         <span>
           <button class="ql-align" value=""></button>
