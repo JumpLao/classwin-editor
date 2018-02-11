@@ -154,6 +154,11 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
+      const _newVal = JSON.parse(newVal);
+      const _oldVal = JSON.parse(oldVal);
+      if (_newVal.ops.length > 0 && _oldVal.ops.length === 0) {
+        this.updateEditor()
+      }
       if (!oldVal || oldVal === '') {
         this.updateEditor()
       }
