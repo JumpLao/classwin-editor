@@ -1,11 +1,20 @@
 <template>
   <div :id="`editor-${uuid}`" >
-    <quill-editor :options="options" ref="editor" :class="{'quill-readonly': readOnly}">
+    <quill-editor
+      ref="editor"
+      :options="options"
+      :class="{'quill-readonly': readOnly}"
+    >
       <div :id="`toolbar-${uuid}`" slot="toolbar" class="quill-toolbar">
         <span>
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
           <button class="ql-underline"></button>
+        </span>
+        <span>
+          <select class="ql-color" title="color">
+            <option v-for="color in colors" :key="color" :value="color" />
+          </select>
         </span>
         <span>
           <button class="ql-align" value=""></button>
@@ -70,6 +79,7 @@ export default {
       return v.toString(16)
     })
     return {
+      colors: ['black', 'red', 'green', 'blue'],
       uuid,
       options: {
         readOnly: this.readOnly || false,
