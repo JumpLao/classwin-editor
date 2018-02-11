@@ -71,5 +71,5 @@ export default class ImagePicker {
   }
 }
 if (window.Quill) {
-  window.Quill.register('modules/EquationEditor', ImagePicker)
+  window.Quill.register('modules/ImagePicker', ImagePicker)
 }
