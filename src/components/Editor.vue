@@ -157,6 +157,9 @@ export default {
       if (!oldVal || oldVal === '') {
         this.updateEditor()
       }
+      if (this.readOnly) {
+        this.updateEditor()
+      }
     }
   },
   methods: {
@@ -176,6 +179,7 @@ export default {
       // let refocus = quill.hasFocus()
       this.$emit('input', JSON.stringify(data))
       quill.setContents(data)
+      // quill.focus()
       // if (refocus) {
       //   let range = quill.getLength()
       //   quill.focus()
