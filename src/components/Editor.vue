@@ -12,9 +12,10 @@
           <button class="ql-underline"></button>
         </span>
         <span>
-          <select class="ql-color" title="color">
-            <option v-for="color in colors" :key="color" :value="color" />
-          </select>
+          <select class="ql-color" title="color"></select>
+        </span>
+        <span>
+          <select class="ql-size" title="size"></select>
         </span>
         <span>
           <button class="ql-align" value=""></button>
@@ -79,7 +80,6 @@ export default {
       return v.toString(16)
     })
     return {
-      colors: ['black', 'red', 'green', 'blue'],
       uuid,
       options: {
         readOnly: this.readOnly || false,
