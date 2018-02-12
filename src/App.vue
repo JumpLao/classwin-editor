@@ -2,6 +2,7 @@
   <div id="app">
     <img src="./assets/logo.png">
     <editor v-model="data" placeholder="place holder" :readOnly="false" :gapp-config="config"></editor>
+    <editor v-model="data" placeholder="place holder" :readOnly="true" :gapp-config="config"></editor>
     {{data}}
   </div>
 </template>
@@ -28,9 +29,9 @@ export default {
   },
   mounted () {
     let self = this
-    setTimeout(function () {
-      // self.data = "{\"ops\":[{\"insert\":\"Hello worl\\n\"}]}"
-    },1000)
+    // setTimeout(function () {
+    //   self.data = "{\"ops\":[{\"insert\":\"Hello worl\\n\"}]}"
+    // },1000)
   }
 }
 </script>

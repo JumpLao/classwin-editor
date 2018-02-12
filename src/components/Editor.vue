@@ -1,11 +1,22 @@
 <template>
   <div :id="`editor-${uuid}`" >
-    <quill-editor :options="options" ref="editor" :class="{'quill-readonly': readOnly}">
+    <quill-editor
+      ref="editor"
+      :options="options"
+      :class="{'quill-readonly': readOnly}"
+    >
       <div :id="`toolbar-${uuid}`" slot="toolbar" class="quill-toolbar">
+        <span>
+          <select class="ql-size" title="size"></select>
+        </span>
         <span>
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
           <button class="ql-underline"></button>
+        </span>
+        <span>
+          <select class="ql-color" title="color"></select>
+          <select class="ql-background" title="color"></select>
         </span>
         <span>
           <button class="ql-align" value=""></button>
@@ -143,7 +154,17 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
-      this.updateEditor()
+      const _newVal = JSON.parse(newVal)
+      const _oldVal = JSON.parse(oldVal)
+      if (_newVal.ops.length > 0 && _oldVal.ops.length === 0) {
+        this.updateEditor()
+      }
+      if (!oldVal || oldVal === '') {
+        this.updateEditor()
+      }
+      if (this.readOnly) {
+        this.updateEditor()
+      }
     }
   },
   methods: {
@@ -160,13 +181,15 @@ export default {
           data = {ops: []}
         }
       }
-      let refocus = quill.hasFocus()
+      // let refocus = quill.hasFocus()
+      this.$emit('input', JSON.stringify(data))
       quill.setContents(data)
-      if (refocus) {
-        let range = quill.getLength()
-        quill.focus()
-        quill.setSelection(range)
-      }
+      // quill.focus()
+      // if (refocus) {
+      //   let range = quill.getLength()
+      //   quill.focus()
+      //   quill.setSelection(range)
+      // }
     }
   }
 }
